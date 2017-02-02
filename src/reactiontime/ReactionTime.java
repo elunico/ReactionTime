@@ -11,6 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
@@ -32,6 +33,12 @@ import javafx.stage.WindowEvent;
  * @author thomaspovinelli
  */
 public class ReactionTime extends Application {
+
+    private static final class NoActionHandler<T extends Event>
+            implements EventHandler<T> {
+        @Override
+        public void handle(T event) { /* do nothing */ }
+    }
 
     private final double average = 0.0;
     private final Label averageLabel = new Label("Average: " + average);
@@ -59,13 +66,9 @@ public class ReactionTime extends Application {
         ps = primaryStage;
         textArea.setEditable(false);
 
-        ps.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.C)
-                    cheater = true;
-            }
-
+        ps.addEventHandler(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
+            if (event.getCode() == KeyCode.C)
+                cheater = !cheater;
         });
 
         scoreBox.setSpacing(10);
@@ -83,20 +86,19 @@ public class ReactionTime extends Application {
             t.cancel();
         });
 
+        scoreStage.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, (WindowEvent e) -> {
+            primaryStage.close();
+            t.purge();
+            t.cancel();
+        });
+
         btn = new Button();
         btn.setPrefWidth(300);
         btn.setPrefHeight(250);
         btn.setText("Click and hold to begin");
         btn.setStyle("-fx-base: #CC0000");
         btn.setOnMousePressed(e -> timerStart());
-        btn.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                // Silent. Only here to remove the event handler action
-                // previously delegated to the action
-            }
-
-        });
+        btn.setOnMouseReleased(new NoActionHandler());
 
         StackPane root = new StackPane();
         root.getChildren().add(btn);
@@ -140,14 +142,7 @@ public class ReactionTime extends Application {
                     }
 
                 });
-                btn.setOnMousePressed(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        // Silent. Only here to remove the event handler action
-                        // previously delegated to the action
-                    }
-
-                });
+                btn.setOnMousePressed(new NoActionHandler());
             }
 
         });
@@ -175,14 +170,7 @@ public class ReactionTime extends Application {
                                     textArea.setText(textArea.getText() + "\n" + elapse);
                                 }
                             });
-                            btn.setOnMousePressed(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent event) {
-                                    // Silent. Only here to remove the event handler action
-                                    // previously delegated to the action
-                                }
-
-                            });
+                            btn.setOnMousePressed(new NoActionHandler());
                         }
                     });
                 }
