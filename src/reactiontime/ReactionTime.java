@@ -72,7 +72,8 @@ public class ReactionTime extends Application {
         btn.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-
+                // Silent. Only here to remove the event handler action
+                // previously delegated to the action
             }
 
         });
@@ -126,7 +127,8 @@ public class ReactionTime extends Application {
                 btn.setOnMousePressed(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-
+                        // Silent. Only here to remove the event handler action
+                        // previously delegated to the action
                     }
 
                 });
@@ -158,7 +160,8 @@ public class ReactionTime extends Application {
                             btn.setOnMousePressed(new EventHandler<MouseEvent>() {
                                 @Override
                                 public void handle(MouseEvent event) {
-
+                                    // Silent. Only here to remove the event handler action
+                                    // previously delegated to the action
                                 }
 
                             });
