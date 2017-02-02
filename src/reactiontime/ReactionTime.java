@@ -5,7 +5,6 @@
  */
 package reactiontime;
 
-
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -29,17 +28,21 @@ import javafx.stage.WindowEvent;
  * @author thomaspovinelli
  */
 public class ReactionTime extends Application {
+
     Button btn;
     Stage scoreStage = new Stage();
     VBox scoreBox = new VBox(new Label("Previous Reactions (ms):"));
     Timer t = new Timer();
+    Stage ps;
+
+    boolean earlyStart = false;
 
     EventType<MouseEvent> beforeHold = MouseEvent.MOUSE_PRESSED;
     EventType<MouseEvent> whileHolding = MouseEvent.MOUSE_RELEASED;
 
     @Override
     public void start(Stage primaryStage) {
-
+        ps = primaryStage;
 
         scoreBox.setSpacing(10);
         scoreBox.setPrefSize(200, 350);
@@ -55,11 +58,8 @@ public class ReactionTime extends Application {
             public void handle(WindowEvent e) {
                 scoreStage.close();
                 t.purge();
-                try {
-                    t.cancel();
-                } catch (IllegalStateException ex) {
+                t.cancel();
 
-                }
             }
         });
 
@@ -68,7 +68,14 @@ public class ReactionTime extends Application {
         btn.setPrefHeight(250);
         btn.setText("Click and hold to begin");
         btn.setStyle("-fx-base: #CC0000");
-        btn.addEventHandler(beforeHold, e -> timerStart());
+        btn.setOnMousePressed(e -> timerStart());
+        btn.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+            }
+
+        });
 
         StackPane root = new StackPane();
         root.getChildren().add(btn);
@@ -88,6 +95,7 @@ public class ReactionTime extends Application {
     }
 
     private void timerStart() {
+        earlyStart = false;
         btn.setText("HOLD...");
         btn.setStyle("-fx-base: #CC0000");
         Platform.runLater(new Runnable() {
@@ -99,41 +107,66 @@ public class ReactionTime extends Application {
                         t.purge();
                         t.cancel();
                         t = new Timer();
+                        ps.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>() {
+                            @Override
+                            public void handle(WindowEvent e) {
+                                scoreStage.close();
+                                t.purge();
+                                t.cancel();
+
+                            }
+                        });
+                        earlyStart = true;
                         btn.setText("TOO SOON!\nHold to try again");
                         btn.setStyle("-fx-base: #0000CC");
                         btn.setOnMousePressed(e -> timerStart());
                     }
 
                 });
-            }
-
-
-        });
-        t.schedule(new TimerTask() {
-            @Override
-            public void run() {
-
-                Platform.runLater(new Runnable() {
+                btn.setOnMousePressed(new EventHandler<MouseEvent>() {
                     @Override
-                    public void run() {
+                    public void handle(MouseEvent event) {
 
-                        long ctime = System.currentTimeMillis();
-                        btn.setStyle("-fx-base: #00CC00");
-                        btn.setText("RELEASE!");
-                        btn.setOnMouseReleased(new EventHandler<MouseEvent>() {
-                            @Override
-                            public void handle(MouseEvent event) {
-                                long elapse = System.currentTimeMillis() - ctime;
-                                btn.setText("Reaction time: " + elapse + "\nHold to begin again.");
-                                btn.setStyle("-fx-base: #CC0000");
-                                btn.setOnMousePressed(e -> timerStart());
-                                scoreBox.getChildren().add(new Label(elapse+"\n"));
-                        }
-                        });
                     }
+
                 });
             }
-        }, (new Random()).nextInt(1200) + 800);
+
+        });
+        if (!earlyStart) {
+            t.schedule(new TimerTask() {
+                @Override
+                public void run() {
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            long ctime = System.currentTimeMillis();
+                            btn.setStyle("-fx-base: #00CC00");
+                            btn.setText("RELEASE!");
+                            btn.setOnMouseReleased(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent event) {
+                                    long elapse = System.currentTimeMillis() - ctime;
+                                    btn.setText("Reaction time: " + elapse + "\nHold to begin again.");
+                                    btn.setStyle("-fx-base: #CC0000");
+                                    btn.setOnMousePressed(e -> timerStart());
+                                    scoreBox.getChildren().add(new Label(elapse + "\n"));
+                                }
+                            });
+                            btn.setOnMousePressed(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent event) {
+
+                                }
+
+                            });
+                        }
+                    });
+                }
+            }, (new Random()).nextInt(1200) + 800);
+        }
 
     }
 
