@@ -5,6 +5,7 @@
  */
 package reactiontime;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -16,6 +17,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -29,20 +31,30 @@ import javafx.stage.WindowEvent;
  */
 public class ReactionTime extends Application {
 
-    Button btn;
-    Stage scoreStage = new Stage();
-    VBox scoreBox = new VBox(new Label("Previous Reactions (ms):"));
-    Timer t = new Timer();
-    Stage ps;
+    private final double average = 0.0;
+    private final Label averageLabel = new Label("Average: " + average);
+    private final ArrayList<Double> values = new ArrayList();
+    private Button btn;
+    private final Stage scoreStage = new Stage();
+    private final TextArea textArea = new TextArea();
+    private final VBox scoreBox = new VBox(new Label("Previous Reactions (ms):"), textArea, averageLabel);
+    private Timer t = new Timer();
+    private Stage ps;
 
-    boolean earlyStart = false;
+    private boolean earlyStart = false;
 
-    EventType<MouseEvent> beforeHold = MouseEvent.MOUSE_PRESSED;
-    EventType<MouseEvent> whileHolding = MouseEvent.MOUSE_RELEASED;
+    public double averageOf(ArrayList<Double> list) {
+        double sum = 0;
+        for (Double d: list) {
+            sum += d;
+        }
+        return sum / list.size();
+    }
 
     @Override
     public void start(Stage primaryStage) {
         ps = primaryStage;
+        textArea.setEditable(false);
 
         scoreBox.setSpacing(10);
         scoreBox.setPrefSize(200, 350);
@@ -53,14 +65,10 @@ public class ReactionTime extends Application {
         scoreStage.setScene(new Scene(scoreBox));
         scoreStage.show();
 
-        primaryStage.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent e) {
-                scoreStage.close();
-                t.purge();
-                t.cancel();
-
-            }
+        primaryStage.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, (WindowEvent e) -> {
+            scoreStage.close();
+            t.purge();
+            t.cancel();
         });
 
         btn = new Button();
@@ -108,14 +116,10 @@ public class ReactionTime extends Application {
                         t.purge();
                         t.cancel();
                         t = new Timer();
-                        ps.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>() {
-                            @Override
-                            public void handle(WindowEvent e) {
-                                scoreStage.close();
-                                t.purge();
-                                t.cancel();
-
-                            }
+                        ps.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, (WindowEvent e) -> {
+                            scoreStage.close();
+                            t.purge();
+                            t.cancel();
                         });
                         earlyStart = true;
                         btn.setText("TOO SOON!\nHold to try again");
@@ -154,7 +158,9 @@ public class ReactionTime extends Application {
                                     btn.setText("Reaction time: " + elapse + "\nHold to begin again.");
                                     btn.setStyle("-fx-base: #CC0000");
                                     btn.setOnMousePressed(e -> timerStart());
-                                    scoreBox.getChildren().add(new Label(elapse + "\n"));
+                                    values.add((double)elapse);
+                                    averageLabel.setText("Average: " + String.format("%.3f", averageOf(values)));
+                                    textArea.setText(textArea.getText() + "\n" + elapse);
                                 }
                             });
                             btn.setOnMousePressed(new EventHandler<MouseEvent>() {
