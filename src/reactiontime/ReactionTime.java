@@ -18,6 +18,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -42,6 +44,7 @@ public class ReactionTime extends Application {
     private Stage ps;
 
     private boolean earlyStart = false;
+    private boolean cheater = false;
 
     public double averageOf(ArrayList<Double> list) {
         double sum = 0;
@@ -55,6 +58,15 @@ public class ReactionTime extends Application {
     public void start(Stage primaryStage) {
         ps = primaryStage;
         textArea.setEditable(false);
+
+        ps.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.C)
+                    cheater = true;
+            }
+
+        });
 
         scoreBox.setSpacing(10);
         scoreBox.setPrefSize(200, 350);
@@ -154,7 +166,7 @@ public class ReactionTime extends Application {
                             btn.setOnMouseReleased(new EventHandler<MouseEvent>() {
                                 @Override
                                 public void handle(MouseEvent event) {
-                                    long elapse = System.currentTimeMillis() - ctime;
+                                    long elapse = cheater ? 1: System.currentTimeMillis() - ctime;
                                     btn.setText("Reaction time: " + elapse + "\nHold to begin again.");
                                     btn.setStyle("-fx-base: #CC0000");
                                     btn.setOnMousePressed(e -> timerStart());
