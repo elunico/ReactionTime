@@ -5,15 +5,10 @@
  */
 package reactiontime;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -25,37 +20,41 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import javafx.stage.WindowEvent;
 
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
- *
  * @author thomaspovinelli
  */
 public class ReactionTime extends Application {
 
-    private static final class NoActionHandler<T extends Event>
-            implements EventHandler<T> {
-        @Override
-        public void handle(T event) { /* do nothing */ }
-    }
-
     private final double average = 0.0;
     private final Label averageLabel = new Label("Average: " + average);
     private final ArrayList<Double> values = new ArrayList();
-    private Button btn;
     private final Stage scoreStage = new Stage();
     private final TextArea textArea = new TextArea();
-    private final VBox scoreBox = new VBox(new Label("Previous Reactions (ms):"), textArea, averageLabel);
+    private final VBox scoreBox = new VBox(
+      new Label("Previous Reactions (ms):"), textArea, averageLabel);
+    private Button btn;
     private Timer t = new Timer();
     private Stage ps;
-
     private boolean earlyStart = false;
     private boolean cheater = false;
 
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     public double averageOf(ArrayList<Double> list) {
         double sum = 0;
-        for (Double d: list) {
+        for (Double d : list) {
             sum += d;
         }
         return sum / list.size();
@@ -67,8 +66,9 @@ public class ReactionTime extends Application {
         textArea.setEditable(false);
 
         ps.addEventHandler(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
-            if (event.getCode() == KeyCode.C)
+            if (event.getCode() == KeyCode.C) {
                 cheater = !cheater;
+            }
         });
 
         scoreBox.setSpacing(10);
@@ -80,17 +80,19 @@ public class ReactionTime extends Application {
         scoreStage.setScene(new Scene(scoreBox));
         scoreStage.show();
 
-        primaryStage.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, (WindowEvent e) -> {
-            scoreStage.close();
-            t.purge();
-            t.cancel();
-        });
+        primaryStage.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST,
+          (WindowEvent e) -> {
+              scoreStage.close();
+              t.purge();
+              t.cancel();
+          });
 
-        scoreStage.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, (WindowEvent e) -> {
-            primaryStage.close();
-            t.purge();
-            t.cancel();
-        });
+        scoreStage.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST,
+          (WindowEvent e) -> {
+              primaryStage.close();
+              t.purge();
+              t.cancel();
+          });
 
         btn = new Button();
         btn.setPrefWidth(300);
@@ -110,13 +112,6 @@ public class ReactionTime extends Application {
         primaryStage.show();
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     private void timerStart() {
         earlyStart = false;
         btn.setText("HOLD...");
@@ -130,11 +125,12 @@ public class ReactionTime extends Application {
                         t.purge();
                         t.cancel();
                         t = new Timer();
-                        ps.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, (WindowEvent e) -> {
-                            scoreStage.close();
-                            t.purge();
-                            t.cancel();
-                        });
+                        ps.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST,
+                          (WindowEvent e) -> {
+                              scoreStage.close();
+                              t.purge();
+                              t.cancel();
+                          });
                         earlyStart = true;
                         btn.setText("TOO SOON!\nHold to try again");
                         btn.setStyle("-fx-base: #0000CC");
@@ -158,18 +154,25 @@ public class ReactionTime extends Application {
                             long ctime = System.currentTimeMillis();
                             btn.setStyle("-fx-base: #00CC00");
                             btn.setText("RELEASE!");
-                            btn.setOnMouseReleased(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent event) {
-                                    long elapse = cheater ? 1: System.currentTimeMillis() - ctime;
-                                    btn.setText("Reaction time: " + elapse + "\nHold to begin again.");
-                                    btn.setStyle("-fx-base: #CC0000");
-                                    btn.setOnMousePressed(e -> timerStart());
-                                    values.add((double)elapse);
-                                    averageLabel.setText("Average: " + String.format("%.3f", averageOf(values)));
-                                    textArea.setText(textArea.getText() + "\n" + elapse);
-                                }
-                            });
+                            btn.setOnMouseReleased(
+                              new EventHandler<MouseEvent>() {
+                                  @Override
+                                  public void handle(MouseEvent event) {
+                                      long elapse = cheater ?
+                                                    1 :
+                                                    System.currentTimeMillis() - ctime;
+                                      btn.setText(
+                                        "Reaction time: " + elapse + "\nHold to begin again.");
+                                      btn.setStyle("-fx-base: #CC0000");
+                                      btn.setOnMousePressed(e -> timerStart());
+                                      values.add((double) elapse);
+                                      averageLabel.setText(
+                                        "Average: " + String.format("%.3f",
+                                          averageOf(values)));
+                                      textArea.setText(
+                                        textArea.getText() + "\n" + elapse);
+                                  }
+                              });
                             btn.setOnMousePressed(new NoActionHandler());
                         }
                     });
@@ -177,6 +180,15 @@ public class ReactionTime extends Application {
             }, (new Random()).nextInt(1200) + 800);
         }
 
+    }
+
+    private static final class NoActionHandler<T extends Event>
+      implements EventHandler<T> {
+
+        @Override
+        public void handle(T event) {
+            /* do nothing */
+        }
     }
 
 }
