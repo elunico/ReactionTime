@@ -34,11 +34,11 @@ public class ReactionTime extends Application {
 
     private final double average = 0.0;
     private final Label averageLabel = new Label("Average: " + average);
-    private final ArrayList<Double> values = new ArrayList();
+    private final ArrayList<Double> values = new ArrayList<>();
     private final Stage scoreStage = new Stage();
     private final TextArea textArea = new TextArea();
-    private final VBox scoreBox = new VBox(
-      new Label("Previous Reactions (ms):"), textArea, averageLabel);
+    private final VBox scoreBox = new VBox(new Label("Previous Reactions (ms):"),
+      textArea, averageLabel);
     private Button btn;
     private Timer t = new Timer();
     private Stage ps;
@@ -52,7 +52,7 @@ public class ReactionTime extends Application {
         launch(args);
     }
 
-    public double averageOf(ArrayList<Double> list) {
+    private double averageOf(ArrayList<Double> list) {
         double sum = 0;
         for (Double d : list) {
             sum += d;
@@ -100,7 +100,7 @@ public class ReactionTime extends Application {
         btn.setText("Click and hold to begin");
         btn.setStyle("-fx-base: #CC0000");
         btn.setOnMousePressed(e -> timerStart());
-        btn.setOnMouseReleased(new NoActionHandler());
+        btn.setOnMouseReleased(new NoActionHandler<>());
 
         StackPane root = new StackPane();
         root.getChildren().add(btn);
@@ -138,7 +138,7 @@ public class ReactionTime extends Application {
                     }
 
                 });
-                btn.setOnMousePressed(new NoActionHandler());
+                btn.setOnMousePressed(new NoActionHandler<>());
             }
 
         });
@@ -147,34 +147,26 @@ public class ReactionTime extends Application {
                 @Override
                 public void run() {
 
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            long ctime = System.currentTimeMillis();
-                            btn.setStyle("-fx-base: #00CC00");
-                            btn.setText("RELEASE!");
-                            btn.setOnMouseReleased(
-                              new EventHandler<MouseEvent>() {
-                                  @Override
-                                  public void handle(MouseEvent event) {
-                                      long elapse = cheater ?
-                                                    1 :
-                                                    System.currentTimeMillis() - ctime;
-                                      btn.setText(
-                                        "Reaction time: " + elapse + "\nHold to begin again.");
-                                      btn.setStyle("-fx-base: #CC0000");
-                                      btn.setOnMousePressed(e -> timerStart());
-                                      values.add((double) elapse);
-                                      averageLabel.setText(
-                                        "Average: " + String.format("%.3f",
-                                          averageOf(values)));
-                                      textArea.setText(
-                                        textArea.getText() + "\n" + elapse);
-                                  }
-                              });
-                            btn.setOnMousePressed(new NoActionHandler());
-                        }
+                    Platform.runLater(() -> {
+                        long ctime = System.currentTimeMillis();
+                        btn.setStyle("-fx-base: #00CC00");
+                        btn.setText("RELEASE!");
+                        btn.setOnMouseReleased(event -> {
+                              long elapse = cheater ?
+                                            1 :
+                                            System.currentTimeMillis() - ctime;
+                              btn.setText(
+                                "Reaction time: " + elapse + "\nHold to begin again.");
+                              btn.setStyle("-fx-base: #CC0000");
+                              btn.setOnMousePressed(e -> timerStart());
+                              values.add((double) elapse);
+                              averageLabel.setText(
+                                "Average: " + String.format("%.3f",
+                                  averageOf(values)));
+                              textArea.setText(
+                                textArea.getText() + "\n" + elapse);
+                          });
+                        btn.setOnMousePressed(new NoActionHandler<>());
                     });
                 }
             }, (new Random()).nextInt(1200) + 800);
