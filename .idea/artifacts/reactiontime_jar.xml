@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="reactiontime:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/reactiontime_jar</output-path>
+    <root id="archive" name="reactiontime.jar">
+      <element id="module-output" name="reactiontime" />
+    </root>
+  </artifact>
+</component>

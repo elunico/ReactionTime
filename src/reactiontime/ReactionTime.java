@@ -22,10 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 /**
  * @author thomaspovinelli
@@ -52,7 +49,7 @@ public class ReactionTime extends Application {
         launch(args);
     }
 
-    private double averageOf(ArrayList<Double> list) {
+    private double averageOf(List<Double> list) {
         double sum = 0;
         for (Double d : list) {
             sum += d;
@@ -152,9 +149,9 @@ public class ReactionTime extends Application {
                         btn.setStyle("-fx-base: #00CC00");
                         btn.setText("RELEASE!");
                         btn.setOnMouseReleased(event -> {
-                              long elapse = cheater ?
-                                            1 :
-                                            System.currentTimeMillis() - ctime;
+                              long elapse = System.currentTimeMillis() - ctime;
+                              // more accurate then checking first
+                              elapse = cheater ? 1 : elapse;
                               btn.setText(
                                 "Reaction time: " + elapse + "\nHold to begin again.");
                               btn.setStyle("-fx-base: #CC0000");
