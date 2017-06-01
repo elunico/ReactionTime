@@ -12,11 +12,7 @@ import javafx.stage.Stage;
 public class Driver extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        ReactionTime.init(primaryStage);
-        Scene scene = ReactionTime.scene();
-
-        primaryStage.setTitle("Reaction Test");
-        primaryStage.setScene(scene);
+        ReactionTime rt = new ReactionTime(primaryStage);
         primaryStage.show();
     }
 

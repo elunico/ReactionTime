@@ -27,40 +27,28 @@ import java.util.*
 /**
  * @author thomaspovinelli
  */
-class ReactionTime {
+class ReactionTime(private var primaryStage: Stage) {
 
     private val average = 0.0
     private val averageLabel = Label("Average: " + average)
     private val values = ArrayList<Double>()
     private val scoreStage = Stage()
     private val textArea = TextArea()
-    private val scoreBox = VBox(Label("Previous Reactions (ms):"),
-      textArea, averageLabel)
-    private var btn: Button? = null
+    private val scoreBox = VBox(Label("Previous Reactions (ms):"), textArea, averageLabel)
+    private var btn: Button = Button()
     private var t = Timer()
-    private var primaryStage: Stage
     private var earlyStart = false
     private var cheater = false
-    private var scene: Scene
-
-    constructor(primaryStage: Stage) {
-        this.primaryStage = primaryStage
-        scene = Scene(HBox())
-        start()
-    }
+    var scene: Scene private set
 
     private fun averageOf(list: List<Double>): Double {
-        var sum = 0.0
-        for (d in list) {
-            sum += d
-        }
-        return sum / list.size
+        return list.sum() / list.size
     }
 
     fun start() {
         textArea.isEditable = false
 
-        primaryStage!!.addEventHandler(KeyEvent.KEY_PRESSED) { event: KeyEvent ->
+        primaryStage.addEventHandler(KeyEvent.KEY_PRESSED) { event: KeyEvent ->
             if (event.code == KeyCode.C) {
                 cheater = !cheater
             }
@@ -75,27 +63,24 @@ class ReactionTime {
         scoreStage.scene = Scene(scoreBox)
         scoreStage.show()
 
-        primaryStage.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST
-        ) { e: WindowEvent ->
+        primaryStage.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST) {
             scoreStage.close()
             t.purge()
             t.cancel()
         }
 
-        scoreStage.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST
-        ) { e: WindowEvent ->
+        scoreStage.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST) {
             primaryStage.close()
             t.purge()
             t.cancel()
         }
 
-        btn = Button()
-        btn!!.prefWidth = 300.0
-        btn!!.prefHeight = 250.0
-        btn!!.text = "Click and hold to begin"
-        btn!!.style = "-fx-base: #CC0000"
-        btn!!.setOnMousePressed { e -> timerStart() }
-        btn!!.onMouseReleased = NoActionHandler<MouseEvent>()
+        btn.prefWidth = 300.0
+        btn.prefHeight = 250.0
+        btn.text = "Click and hold to begin"
+        btn.style = "-fx-base: #CC0000"
+        btn.setOnMousePressed { e -> timerStart() }
+        btn.onMouseReleased = NoActionHandler<MouseEvent>()
 
         val root = StackPane()
         root.children.add(btn)
@@ -104,52 +89,51 @@ class ReactionTime {
 
         primaryStage.title = "Reaction Test"
         primaryStage.scene = scene
-        primaryStage.show()
+//        primaryStage.show()
     }
 
     private fun timerStart() {
         earlyStart = false
-        btn!!.text = "HOLD..."
-        btn!!.style = "-fx-base: #CC0000"
+        btn.text = "HOLD..."
+        btn.style = "-fx-base: #CC0000"
         Platform.runLater {
-            btn!!.onMouseReleased = EventHandler<MouseEvent> {
+            btn.onMouseReleased = EventHandler<MouseEvent> {
                 t.purge()
                 t.cancel()
                 t = Timer()
-                primaryStage!!.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST)
-                { e: WindowEvent ->
+                primaryStage.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST) {
                     scoreStage.close()
                     t.purge()
                     t.cancel()
                 }
                 earlyStart = true
-                btn!!.text = "TOO SOON!\nHold to try again"
-                btn!!.style = "-fx-base: #0000CC"
-                btn!!.setOnMousePressed { e -> timerStart() }
+                btn.text = "TOO SOON!\nHold to try again"
+                btn.style = "-fx-base: #0000CC"
+                btn.setOnMousePressed { e -> timerStart() }
             }
-            btn!!.onMousePressed = NoActionHandler<MouseEvent>()
+            btn.onMousePressed = NoActionHandler<MouseEvent>()
         }
         if (!earlyStart) {
-            t.schedule(object : TimerTask() {
+            t.schedule(object: TimerTask() {
                 override fun run() {
 
                     Platform.runLater {
                         val ctime = System.currentTimeMillis()
-                        btn!!.style = "-fx-base: #00CC00"
-                        btn!!.text = "RELEASE!"
-                        btn!!.setOnMouseReleased { event ->
+                        btn.style = "-fx-base: #00CC00"
+                        btn.text = "RELEASE!"
+                        btn.setOnMouseReleased {
                             var elapse = System.currentTimeMillis() - ctime
                             // more accurate then checking first
                             elapse = if (cheater) 1 else elapse
-                            btn!!.text = "Reaction time: $elapse\nHold to begin again."
-                            btn!!.style = "-fx-base: #CC0000"
-                            btn!!.setOnMousePressed { e -> timerStart() }
+                            btn.text = "Reaction time: $elapse\nHold to begin again."
+                            btn.style = "-fx-base: #CC0000"
+                            btn.setOnMousePressed { e -> timerStart() }
                             values.add(elapse.toDouble())
                             averageLabel.text = "Average: " + String.format("%.3f",
-                              averageOf(values))
+                                                                            averageOf(values))
                             textArea.text = textArea.text + "\n" + elapse
                         }
-                        btn!!.onMousePressed = NoActionHandler<MouseEvent>()
+                        btn.onMousePressed = NoActionHandler<MouseEvent>()
                     }
                 }
             }, (Random().nextInt(1200) + 800).toLong())
@@ -157,30 +141,17 @@ class ReactionTime {
 
     }
 
-    private class NoActionHandler<T : Event> : EventHandler<T> {
+
+    private class NoActionHandler<T: Event>: EventHandler<T> {
 
         override fun handle(event: T) {
             /* do nothing */
         }
     }
 
-    companion object {
-
-        var instance: ReactionTime? = null
-
-        @JvmStatic fun init(s: Stage) {
-            instance = ReactionTime(s)
-
-        }
-
-        @JvmStatic fun scene(): Scene  {
-            if (instance === null) {
-                throw IllegalAccessException("Please init the program before attempting to access scene")
-
-            }
-            return instance!!.scene
-        }
-
+    init {
+        scene = Scene(HBox())
+        start()
     }
 
 
