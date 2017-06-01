@@ -7,7 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d4716d61-f86e-49df-b5c5-2f31da92620e" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/reactiontime/ReactionTime.java" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/reactiontime/ReactionTime.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/reactiontime_kt/Driver.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/reactiontime_kt/ReactionTime.kt" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -141,6 +143,10 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="reactiontime" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -778,12 +784,12 @@
       <workItem from="1494497432749" duration="71000" />
       <workItem from="1494499387079" duration="383000" />
       <workItem from="1496276134523" duration="855000" />
-      <workItem from="1496277022026" duration="336000" />
+      <workItem from="1496277022026" duration="451000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4951000" />
+    <option name="totallyTimeSpent" value="5066000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
