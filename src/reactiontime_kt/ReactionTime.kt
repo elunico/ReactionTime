@@ -45,7 +45,11 @@ class ReactionTime(private var primaryStage: Stage) {
         return list.sum() / list.size
     }
 
-    fun start() {
+    fun show() {
+        primaryStage.show()
+    }
+
+    private fun buildUp() {
         textArea.isEditable = false
 
         primaryStage.addEventHandler(KeyEvent.KEY_PRESSED) { event: KeyEvent ->
@@ -89,7 +93,6 @@ class ReactionTime(private var primaryStage: Stage) {
 
         primaryStage.title = "Reaction Test"
         primaryStage.scene = scene
-//        primaryStage.show()
     }
 
     private fun timerStart() {
@@ -151,7 +154,7 @@ class ReactionTime(private var primaryStage: Stage) {
 
     init {
         scene = Scene(HBox())
-        start()
+        buildUp()
     }
 
 
