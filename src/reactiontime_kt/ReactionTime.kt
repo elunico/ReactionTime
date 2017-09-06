@@ -34,12 +34,14 @@ class ReactionTime(private var primaryStage: Stage) {
     private val values = ArrayList<Double>()
     private val scoreStage = Stage()
     private val textArea = TextArea()
-    private val scoreBox = VBox(Label("Previous Reactions (ms):"), textArea, averageLabel)
     private var btn: Button = Button()
+    private var clearButton: Button = Button()
+    private val scoreBox = VBox(Label("Previous Reactions (ms):"), textArea, averageLabel, clearButton)
     private var t = Timer()
     private var earlyStart = false
     private var cheater = false
-    var scene: Scene private set
+    var scene: Scene
+        private set
 
     private fun averageOf(list: List<Double>): Double {
         return list.sum() / list.size
@@ -83,8 +85,12 @@ class ReactionTime(private var primaryStage: Stage) {
         btn.prefHeight = 250.0
         btn.text = "Click and hold to begin"
         btn.style = "-fx-base: #CC0000"
-        btn.setOnMousePressed { e -> timerStart() }
+        btn.setOnMousePressed { timerStart() }
         btn.onMouseReleased = NoActionHandler<MouseEvent>()
+
+        clearButton.text = "Clear"
+        clearButton.setOnMouseClicked { clearAction() }
+
 
         val root = StackPane()
         root.children.add(btn)
@@ -144,6 +150,42 @@ class ReactionTime(private var primaryStage: Stage) {
 
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is ReactionTime) return false
+
+        if (primaryStage != other.primaryStage) return false
+        if (average != other.average) return false
+        if (averageLabel != other.averageLabel) return false
+        if (values != other.values) return false
+        if (scoreStage != other.scoreStage) return false
+        if (textArea != other.textArea) return false
+        if (scoreBox != other.scoreBox) return false
+        if (btn != other.btn) return false
+        if (t != other.t) return false
+        if (earlyStart != other.earlyStart) return false
+        if (cheater != other.cheater) return false
+        if (scene != other.scene) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = primaryStage.hashCode()
+        result = 31 * result + average.hashCode()
+        result = 31 * result + averageLabel.hashCode()
+        result = 31 * result + values.hashCode()
+        result = 31 * result + scoreStage.hashCode()
+        result = 31 * result + textArea.hashCode()
+        result = 31 * result + scoreBox.hashCode()
+        result = 31 * result + btn.hashCode()
+        result = 31 * result + t.hashCode()
+        result = 31 * result + earlyStart.hashCode()
+        result = 31 * result + cheater.hashCode()
+        result = 31 * result + scene.hashCode()
+        return result
+    }
+
 
     private class NoActionHandler<T: Event>: EventHandler<T> {
 
@@ -156,6 +198,13 @@ class ReactionTime(private var primaryStage: Stage) {
         scene = Scene(HBox())
         buildUp()
     }
+
+    private fun clearAction() {
+        textArea.text = ""
+        values.clear()
+        averageLabel.text = ""
+    }
+
 
 
 }

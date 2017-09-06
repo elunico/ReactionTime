@@ -19,5 +19,4 @@ public class Driver extends Application {
         rt.show();
     }
 
-
 }
