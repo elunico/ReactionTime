@@ -7,7 +7,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d4716d61-f86e-49df-b5c5-2f31da92620e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/reactiontime/reactiontime_kt/ReactionTime$NoActionHandler.class" afterPath="$PROJECT_DIR$/out/production/reactiontime/reactiontime_kt/ReactionTime$NoActionHandler.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/reactiontime/reactiontime_kt/ReactionTime$timerStart$1$1$1.class" afterPath="$PROJECT_DIR$/out/production/reactiontime/reactiontime_kt/ReactionTime$timerStart$1$1$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/reactiontime/reactiontime_kt/ReactionTime$timerStart$1$1$2.class" afterPath="$PROJECT_DIR$/out/production/reactiontime/reactiontime_kt/ReactionTime$timerStart$1$1$2.class" />
@@ -18,8 +17,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/reactiontime/reactiontime_kt/ReactionTime$timerStart$2$run$1.class" afterPath="$PROJECT_DIR$/out/production/reactiontime/reactiontime_kt/ReactionTime$timerStart$2$run$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/reactiontime/reactiontime_kt/ReactionTime$timerStart$2.class" afterPath="$PROJECT_DIR$/out/production/reactiontime/reactiontime_kt/ReactionTime$timerStart$2.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/reactiontime/reactiontime_kt/ReactionTime.class" afterPath="$PROJECT_DIR$/out/production/reactiontime/reactiontime_kt/ReactionTime.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/KotlinJavaRuntime.xml" afterPath="$PROJECT_DIR$/.idea/libraries/KotlinJavaRuntime.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -60,8 +57,8 @@
       <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="66">
-              <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+            <state relative-caret-position="88">
+              <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -934,12 +931,20 @@
       <workItem from="1496277022026" duration="336000" />
       <workItem from="1496362013185" duration="145000" />
       <workItem from="1496843715346" duration="352000" />
-      <workItem from="1504683346542" duration="992000" />
+      <workItem from="1504683346542" duration="1026000" />
     </task>
+    <task id="LOCAL-00001" summary="Updated gitignore">
+      <created>1504684491726</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1504684491726</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6448000" />
+    <option name="totallyTimeSpent" value="6482000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -999,6 +1004,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Updated gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated gitignore" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1107,8 +1116,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+        <state relative-caret-position="88">
+          <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
           <folding />
         </state>
       </provider>
