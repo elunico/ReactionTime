@@ -6,7 +6,6 @@
 package reactiontime_kt
 
 import javafx.application.Platform
-import javafx.event.Event
 import javafx.event.EventHandler
 import javafx.geometry.Insets
 import javafx.scene.Scene
@@ -21,14 +20,14 @@ import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
 import javafx.stage.WindowEvent
-
 import java.util.*
 
 /**
  * @author thomaspovinelli
  */
-class ReactionTime(private var primaryStage: Stage) {
 
+
+class ReactionTime(private var primaryStage: Stage) {
     private val average = 0.0
     private val averageLabel = Label("Average: " + average)
     private val values = ArrayList<Double>()
@@ -86,7 +85,7 @@ class ReactionTime(private var primaryStage: Stage) {
         btn.text = "Click and hold to begin"
         btn.style = "-fx-base: #CC0000"
         btn.setOnMousePressed { timerStart() }
-        btn.onMouseReleased = NoActionHandler<MouseEvent>()
+        btn.onMouseReleased = NoAction
 
         clearButton.text = "Clear"
         clearButton.setOnMouseClicked { clearAction() }
@@ -120,7 +119,7 @@ class ReactionTime(private var primaryStage: Stage) {
                 btn.style = "-fx-base: #0000CC"
                 btn.setOnMousePressed { e -> timerStart() }
             }
-            btn.onMousePressed = NoActionHandler<MouseEvent>()
+            btn.onMousePressed = NoAction
         }
         if (!earlyStart) {
             t.schedule(object: TimerTask() {
@@ -142,7 +141,7 @@ class ReactionTime(private var primaryStage: Stage) {
                                                                             averageOf(values))
                             textArea.text = textArea.text + "\n" + elapse
                         }
-                        btn.onMousePressed = NoActionHandler<MouseEvent>()
+                        btn.onMousePressed = NoAction
                     }
                 }
             }, (Random().nextInt(1200) + 800).toLong())
@@ -187,13 +186,6 @@ class ReactionTime(private var primaryStage: Stage) {
     }
 
 
-    private class NoActionHandler<T: Event>: EventHandler<T> {
-
-        override fun handle(event: T) {
-            /* do nothing */
-        }
-    }
-
     init {
         scene = Scene(HBox())
         buildUp()
@@ -204,7 +196,4 @@ class ReactionTime(private var primaryStage: Stage) {
         values.clear()
         averageLabel.text = ""
     }
-
-
-
 }
