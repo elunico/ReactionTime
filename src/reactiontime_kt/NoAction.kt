@@ -8,6 +8,6 @@ import javafx.event.EventHandler
  * Created 2017-Sep-12
  * In ReactionTime
  */
-object NoAction: EventHandler<Event> {
-    override fun handle(event: Event?) = Unit // do nothing
+object NoAction : EventHandler<Event> {
+  override fun handle(event: Event?) = Unit // do nothing
 }
