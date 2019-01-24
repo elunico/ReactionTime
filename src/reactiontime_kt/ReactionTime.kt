@@ -39,8 +39,7 @@ class ReactionTime(private var primaryStage: Stage) {
   private var t = Timer()
   private var earlyStart = false
   private var cheater = false
-  var scene: Scene
-    private set
+  private var scene: Scene
 
   fun show() {
     primaryStage.show()
